@@ -6,7 +6,21 @@
 
     <div class="links">
       <ul>
-        <li v-for="item in links" :key="item">{{ item }}</li>
+        <li v-for="link in myRoutes" :key="link.name">
+          <router-link
+            v-if="link.name == 'dynamic'"
+            :to="{
+              name: link.name,
+              params: { userid: 123, username: 'Ali Wekaa' },
+              query: { age: 32, grade: 'male', sports: 'football' },
+            }"
+            >{{ link.meta.title }}</router-link
+          >
+
+          <router-link v-else :to="{ name: link.name }">{{
+            link.meta.title
+          }}</router-link>
+        </li>
       </ul>
     </div>
     <div class="btns">
@@ -20,8 +34,12 @@
 export default {
   data() {
     return {
-      links: ["Home", "Products", "About Us", "Contact Us"],
+      myRoutes: [],
     };
+  },
+  mounted() {
+    var routes = this.$router.options.routes;
+    this.myRoutes = routes.filter((c) => c.meta.isActive);
   },
 };
 </script>

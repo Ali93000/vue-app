@@ -54,6 +54,11 @@
         <div>
           <input type="submit" value="Add" />
         </div>
+        <div>
+          <button @click="$router.push({ name: RouteNamesEnums.AddStudent })">
+            Add Student Page
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -71,6 +76,13 @@
             {{ sp }}
           </strong>
         </p>
+        <button
+          @click="
+            ViewProfile('dynamic', item.id, item.name, item.age, item.grade, sp)
+          "
+        >
+          View Profile
+        </button>
         <hr />
       </li>
     </ul>
@@ -78,10 +90,13 @@
 </template>
 
 <script>
+import RouteNamesEnums from "@/Enums/RoutingNamesEnum";
+
 export default {
   name: "CrudStudents",
   data() {
     return {
+      RouteNamesEnums,
       sport: "",
       students: [],
       student: {
@@ -120,6 +135,13 @@ export default {
         .then((data) => {
           this.students = data;
         });
+    },
+    ViewProfile(view, id, name, age, grade, sports) {
+      this.$router.push({
+        name: view,
+        params: { userid: id, username: name },
+        query: { age: age, grade: grade, sport: sports },
+      });
     },
   },
   async mounted() {
